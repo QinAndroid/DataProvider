@@ -12,12 +12,43 @@ public class Test {
 
     @DataType(DataTypes.INTEGER)
     @PrimaryKey(PrimaryKeyTypes.AUTOINCREMENT)
-    public int id;
+    private int id;
     @DataType(DataTypes.VARCHAR)
-    public String name;
+    private String name;
     @DataType(DataTypes.INTEGER)
-    public int age;
+    private int age;
     @DataType(DataTypes.VARCHAR)
-    public String address;
+    private String address;
 
+    public int getId() {
+        return id;
+    }
+
+    private void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

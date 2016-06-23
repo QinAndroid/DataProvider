@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.qzk.dataprovider.model.Test;
-import com.qzk.library.DBHelper;
-import com.qzk.library.condition.Conditions;
-import com.qzk.library.condition.CreateConditions;
+import com.qzk.library.DataProvider;
+import com.qzk.library.enums.QuerySortType;
+import com.qzk.library.helpers.DBHelper;
+import com.qzk.library.query.Query;
+import com.qzk.library.query.QueryDo;
+import com.qzk.library.query.QuerySort;
 import com.qzk.library.utils.LogUtils;
 
 import java.util.List;
@@ -22,41 +25,59 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         createTable();
         insertData();
-        queryAll();
 //        queryFirst();
+//        update();
+//        query();
+//        update();
+        query();
     }
 
-    private void createTable(){
+    private void createTable() {
         DBHelper.getInstance().createTable(Test.class);
     }
 
-    private void insertData(){
+    private void insertData() {
         Test test = new Test();
-        test.address = "address";
-        test.name = "name";
-        test.age = 15;
+        test.setAddress("beijing");
+        test.setName("qzk");
+        test.setAge(15);
         DBHelper.getInstance().insertToTable(test);
     }
-    private void queryAll(){
-        List<Object> results = DBHelper.getInstance().findAll(Test.class,"name");
+
+    private void query() {
+        Query query = new Query();
+        query.from(Test.class);
+        query.sort(new QuerySort("id", QuerySortType.DESCENDING));
+        List<Object> results = DataProvider.getInstance().find(query);
         Test test = null;
-        for (Object object : results){
-            test = (Test)object;
-            LogUtils.e("id====>"+test.id);
-            LogUtils.e("name===>"+test.name);
-            LogUtils.e("address===>"+test.address);
-            LogUtils.e("age===>"+test.age);
+        for (Object object : results) {
+            test = (Test) object;
+            LogUtils.e("id====>" + test.getId());
+            LogUtils.e("name===>" + test.getName());
+            LogUtils.e("address===>" + test.getAddress());
+            LogUtils.e("age===>" + test.getAge());
         }
-        LogUtils.e("ResultSize----->"+results.size());
+        LogUtils.e("ResultSize----->" + results.size());
     }
 
-    private void queryFirst(){
-        CreateConditions conditions = new CreateConditions();
-        String query = conditions.setConditions(new Conditions("name","name")).create();
-        Test test = (Test) DBHelper.getInstance().findFist(Test.class,query);
-        LogUtils.e("id====>"+test.id);
-        LogUtils.e("name===>"+test.name);
-        LogUtils.e("address===>"+test.address);
-        LogUtils.e("age===>"+test.age);
+    private void queryFirst() {
+        Query query = new Query();
+        query.from(Test.class);
+        query.sort(new QuerySort("id", QuerySortType.DESCENDING));
+        Test test = (Test) DataProvider.getInstance().findFirst(query);
+        LogUtils.e("id====>" + test.getId());
+        LogUtils.e("name===>" + test.getName());
+        LogUtils.e("address===>" + test.getAddress());
+        LogUtils.e("age===>" + test.getAge());
+    }
+
+    private void update() {
+        LogUtils.e("UPDATE--->");
+        DBHelper.getInstance().updateData("");
+//        Test test =  new Test();
+//        test.setAge(2);
+//        QueryDo queryDo = new QueryDo();
+
+
     }
 }

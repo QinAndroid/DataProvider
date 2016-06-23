@@ -2,7 +2,7 @@ package com.qzk.dataprovider;
 
 import android.app.Application;
 
-import com.qzk.library.DBHelper;
+import com.qzk.library.helpers.DBHelper;
 
 /**
  * Created by qinzongke on 16/6/21.
