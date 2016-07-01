@@ -6,6 +6,7 @@ import com.qzk.library.annotations.PrimaryKey;
 import com.qzk.library.annotations.enums.PrimaryKeyTypes;
 import com.qzk.library.utils.LogUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
@@ -81,6 +82,7 @@ public class ObjectHelper {
             if (null == field || null == object) {
                 return null;
             }
+            field.setAccessible(true);
             return field.get(object);
 
         } catch (Exception e) {

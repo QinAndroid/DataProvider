@@ -6,6 +6,8 @@ import com.qzk.library.annotations.enums.DataTypes;
 import com.qzk.library.utils.LogUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类名：CursorHelper
@@ -56,6 +58,26 @@ public class CursorHelper {
             }
             if(null != setValue){
                 ObjectHelper.setObjectValue(field,result,setValue);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 查询结果多条
+     * @param cursor
+     * @param clazz
+     * @return
+     */
+    public static  List<Object> cursorToList(Cursor cursor, Class clazz){
+        List<Object> result = null;
+        if (null != cursor) {
+            result = new ArrayList<>();
+            while (cursor.moveToNext()){
+                Object res = cursorToObject(cursor,clazz);
+                if(null != res){
+                    result.add(res);
+                }
             }
         }
         return result;

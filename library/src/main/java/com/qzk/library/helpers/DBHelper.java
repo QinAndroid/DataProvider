@@ -5,11 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.qzk.library.annotations.enums.DataTypes;
-import com.qzk.library.query.Query;
 import com.qzk.library.utils.LogUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,45 +38,6 @@ public class DBHelper {
         this.db = BaseSqliteHelper.getInstance(context, dataBaseName).getDataBase();
     }
 
-    /**
-     * 创建单张数据表
-     *
-     * @param clazz
-     */
-    public void createTable(Class clazz) {
-        String table = CreateSQLHelper.createTablesSql(clazz);
-        if (null != this.db) {
-            this.createTable(table);
-            LogUtils.e("create table success");
-        } else {
-            LogUtils.e("please create DataBase first");
-        }
-    }
-
-    /**
-     * 创建多张数据表
-     *
-     * @param tables
-     */
-    public void createTables(List<Class> tables) {
-        for (Class clazz : tables) {
-            createTable(clazz);
-        }
-    }
-
-    /**
-     * 插入数据
-     *
-     * @param object
-     * @return
-     */
-    public long insertToTable(Object object) {
-        LogUtils.e("insert------->");
-        ContentValues values = CreateSQLHelper.createInsertSql(object);
-        long resutl = this.insert(ObjectHelper.getTableName(object.getClass()), values);
-        LogUtils.e("insertSuccess--->" + resutl);
-        return resutl;
-    }
 
     /**
      * 查询clazz全部数据
@@ -119,13 +77,7 @@ public class DBHelper {
         return object;
     }
 
-    /**
-     * 更新数据
-     * @param sql
-     */
-    public void updateData(String sql){
-        this.update(sql);
-    }
+
 
     /**
      * 查询
@@ -136,37 +88,28 @@ public class DBHelper {
         return db.rawQuery(sql, null);
     }
 
-    /**
-     * 插入数据
-     *
-     * @param table
-     * @param values
-     * @return
-     */
-    private long insert(String table, ContentValues values) {
-        long result = this.db.insert(table, null, values);
-        return result;
-    }
 
-    private void update(String sql){
+    /**
+     * 执行带事务sql
+     * @param sql
+     */
+    public void execSQLwithTransaction(String sql){
         this.db.beginTransaction();
         try {
-            String s = "update test set name = 'name1' where id = 1";
-            this.db.execSQL(s);
+            this.db.execSQL(sql);
             this.db.setTransactionSuccessful();
-            LogUtils.e("update--->");
         }finally {
             this.db.endTransaction();
         }
-
     }
 
     /**
-     * 创建数据表
-     *
+     * 执行不带事务sql
      * @param sql
      */
-    private void createTable(String sql) {
+    public void execSQL(String sql){
         this.db.execSQL(sql);
     }
+
+
 }

@@ -4,11 +4,12 @@ import com.qzk.library.annotations.DataType;
 import com.qzk.library.annotations.enums.DataTypes;
 import com.qzk.library.annotations.PrimaryKey;
 import com.qzk.library.annotations.enums.PrimaryKeyTypes;
+import com.qzk.library.entitys.Model;
 
 /**
  * Created by qinzongke on 16/6/21.
  */
-public class Test {
+public class Test extends Model<Test>{
 
     @DataType(DataTypes.INTEGER)
     @PrimaryKey(PrimaryKeyTypes.AUTOINCREMENT)
@@ -51,4 +52,6 @@ public class Test {
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 }

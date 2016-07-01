@@ -1,13 +1,12 @@
 package com.qzk.library;
 
-import com.qzk.library.Exception.ErrorMessageException;
-import com.qzk.library.enums.QuerySortType;
-import com.qzk.library.helpers.CreateSQLHelper;
 import com.qzk.library.helpers.DBHelper;
-import com.qzk.library.query.Query;
+import com.qzk.library.operates.CreateTable;
+import com.qzk.library.operates.Insert;
+import com.qzk.library.querybuilder.FieldQueryBuilder;
+import com.qzk.library.querybuilder.IFieldQuery;
+import com.qzk.library.querybuilder.QueryBuilder;
 import com.qzk.library.utils.LogUtils;
-
-import java.util.List;
 
 /**
  * 类名：DataProvider
@@ -17,6 +16,24 @@ import java.util.List;
  * Created by qinzongke on 6/23/16.
  */
 public class DataProvider {
+
+    /**
+     * 应用层调用
+     * 建表:Class
+     * 查询:Class   查询条件  排序  limit
+     * 插入:Object
+     * 更新:Object  查询条件
+     * 删除:Class   查询条件
+     */
+
+    /**
+     * 底层接口接收
+     * 建表:sql create table xx if not exists
+     * 查询 Class:用于反射出对象并设置对应字断的值,sql (query,sort,limit)select * from xxx where 1=1 and xx=xx order by xx limit x,x;
+     * 插入 sql insert into xx(xx,xx,xx)values(xx,xx,xx);
+     * 更新 sql update xx set xx=xx,xx=xx where 1=1 and xx=xx;
+     * 删除 sql delete from xx where 1=1 and xx=xx;
+     */
 
     private static DataProvider instance = null;
 
@@ -35,60 +52,70 @@ public class DataProvider {
     }
 
     /**
-     * 查询clazz表中数据
-     *
-     * @param query
-     * @return
+     * 创建数据表
+     * @param clazz
      */
-    public List<Object> find(Query query) {
-        try{
-            if(null == query.getClass()){
-                throw new ErrorMessageException("DataProvider->findFist->请先设置要查询的数据表");
-            }
-        }catch (ErrorMessageException e){
-            e.printStackTrace();
-        }
-        String sortString = query.getSortString().toString();
-        String limitString = query.getLimitString().toString();
-        StringBuffer sql = query.createSqlQuery();
-        if(null != sortString){
-            sql.append(sortString);
-        }
-        if(null != limitString){
-            sql.append(limitString);
-        }
-        LogUtils.e("querySql--->" + sql.toString());
-        return DBHelper.getInstance().findAll(query.getClazz(), sql.toString());
+    public void createTable(Class clazz){
+        CreateTable create = new CreateTable();
+        create.createTable(clazz);
+        String sql = create.createSql();
+        LogUtils.e("creteTableSql--->"+create.createSql());
+        this.execSql(sql);
+    }
+
+    /**
+     * 创建数据表
+     * @param sql
+     */
+    public void createTable(String sql){
+        LogUtils.e("createTableSql--->"+sql);
+       this.execSql(sql);
     }
 
 
     /**
-     * 查询单条数据
-     * @param query
+     * 插入数据
+     * @param object
+     */
+    public void insert(Object object){
+        Insert insert = new Insert();
+        insert.insert(object);
+        String sql = insert.createSql();
+        LogUtils.e("insertSql--->"+sql);
+        this.execSQLwithTran(sql);
+    }
+
+
+    /**
+     * 根据指定条件 进行update delete  select
+     * @param clazz 要操作的数据表
      * @return
      */
-    public Object findFirst(Query query){
-        try{
-            if(null == query.getClass()){
-                throw new ErrorMessageException("DataProvider->findFist->请先设置要查询的数据表");
-            }
-        }catch (ErrorMessageException e){
-            e.printStackTrace();
-        }
-        String sortString = query.getSortString().toString();
-        String limitString = " limit 0,1";
-        StringBuffer sql = query.createSqlQuery();
-        if(null != sortString){
-            sql.append(sortString);
-        }
-        sql.append(limitString);
-        LogUtils.e("queryFirstSql--->" + sql.toString());
-        return DBHelper.getInstance().findFist(query.getClazz(), sql.toString());
+    public QueryBuilder where(Class clazz){
+        return new QueryBuilder(clazz);
     }
 
-    public void update(Object object,Query query){
-
+    public IFieldQuery whereByField(Class clazz){
+        return new FieldQueryBuilder();
     }
+
+
+    /**
+     * 执行带事务sql
+     * @param sql
+     */
+    private void execSQLwithTran(String sql){
+        DBHelper.getInstance().execSQLwithTransaction(sql);
+    }
+
+    /**
+     * 执行不带事务sql
+     * @param sql
+     */
+    private void execSql(String sql){
+        DBHelper.getInstance().execSQL(sql);
+    }
+
 
 
 

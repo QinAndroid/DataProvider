@@ -12,6 +12,11 @@ public class KeyValue {
     private String key;
     private Object object;
 
+    public KeyValue(String key, Object object) {
+        this.key = key;
+        this.object = object;
+    }
+
     public String getKey() {
         return key;
     }
