@@ -24,16 +24,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = DataProvider.getInstance();
-        test();
-//        createTable();
-//        insertData();
-//        queryFirst();
-//        update();
+        createTable();
+        insertData();
 //        query();
-//        update();
-//        query();
-//        delete();
-//        query();
+        queryIden();
     }
 
     private void createTable() {
@@ -49,11 +43,7 @@ public class MainActivity extends Activity {
         DataProvider.getInstance().insert(test);
     }
 
-    //DataProvider.getInstance().query(Test.class,fieldsName).equal(xx,xx).notequal(xx,xx).like(xx,xx).sort(xx,xx).limit(xx,xx).findAll();
-    // DataProvider.getInstance().query(Test.class,fieldsName).equal(xx,xx).notequal(xx,xx).like(xx,xx).sort(xx,xx).limit(xx,xx).findFirst();
-    //DataProvider.getInstance().update(test).equal(xx,xx).notequal(xx,xx).like(xx,xx).update();
-    //DataProvider.getInstance().delete(Test.class).equal(xx,xx).notequal(xx,xx),like(xx,xx).delete();
-    private void test() {
+    private void query() {
         //创建数据表
         db.createTable(Test.class);
         //插入数据
@@ -62,76 +52,71 @@ public class MainActivity extends Activity {
         test.setName("qzk");
         test.setAge(15);
         db.insert(test);
-        //条件查询
-        db.where(Test.class).findAll();
-        db.where(Test.class).equal("name","name").findAll();
-        db.where(Test.class).equal("name","name").like("name","n").findAll("name","age");
-        db.where(Test.class).equal("name","name").like("name","n").limit(0,10).findAll("name","age");
-        db.where(Test.class).equal("name","name").limit(10,20).findAll(new QuerySort("name",QuerySortType.ASCENDING));
-        db.where(Test.class).findAll(new QuerySort("age",QuerySortType.DESCENDING),"name","age");
-        MultiQuerySorts sorts = new MultiQuerySorts();
-        sorts.add(new QuerySort("age",QuerySortType.ASCENDING),new QuerySort("name",QuerySortType.DESCENDING));
-        db.where(Test.class).findAll(sorts);
-        db.where(Test.class).findAll(sorts,"name","test");
-        //单条数据
-        db.where(Test.class).equal("name","name").findFirst("name","age");
         //更新数据
         Test updateTest = new Test();
         updateTest.setAddress("Update");
-        db.where(Test.class).equal("id",1).limit(1,10).update(updateTest);
+        updateTest.setAge(1);
+        db.where(Test.class).equal("id", 7).update(updateTest);
         //删除数据
-        db.where(Test.class).equal("id",1).delete();
+//        db.where(Test.class).equal("id",1).delete();
+        //条件查询
+        List<Object> result = db.where(Test.class).findAll();
+//        LogUtils.e("findAll--->");
+//        printf(result);
+//        result = db.where(Test.class).equal("name", "qzk").findAll();
+//        LogUtils.e("findAll-->address=Update--->");
+//        printf(result);
+//        result = db.where(Test.class).equal("name", "qzk").like("address", "U").findAll("name", "address");
+//        LogUtils.e("findAll-->name=qzk or address like U--->");
+//        printf(result);
+//        db.where(Test.class).equal("name","name").like("name","n").limit(0,10).findAll("name","age");
+//       result= db.where(Test.class).equal("name","qzk").findAll(new QuerySort("id",QuerySortType.DESCENDING));
+//        LogUtils.e("sort--->");
+//        printf(result);
+//        result = db.where(Test.class).findAll(new QuerySort("age", QuerySortType.DESCENDING), "name", "age");
+//        LogUtils.e("sort--->");
+//        printf(result);
+//        MultiQuerySorts sorts = new MultiQuerySorts();
+//        sorts.add(new QuerySort("age", QuerySortType.DESCENDING), new QuerySort("address", QuerySortType.DESCENDING));
+//        result = db.where(Test.class).findAll(sorts);
+//        LogUtils.e("multi--->");
+//        printf(result);
+//        db.where(Test.class).findAll(sorts,"name","test");
+//        //单条数据
+        Object object = db.where(Test.class).equal("age",1).findFirst("name","age");
+        printf(object);
 
 
-        //条件查询并排序
-//        db.where(Test.class).equal("name","name").or().like("name","n").findAllBySort(new QuerySort("name",QuerySortType.ASCENDING));
 
-//        DataProvider.getInstance().query(Test.class).equal("name", "name").notEqual("name", "test").like("name", "n").or().like("name", "m").limit(0, 10).findAllBySort(new QuerySort("name", QuerySortType.ASCENDING), new QuerySort("type", QuerySortType.DESCENDING));
-//        DataProvider.getInstance().query(Test.class).findAll();
     }
 
-//    private void query() {
-//        Query query = new Query();
-//        query.from(Test.class);
-////        query.sort(new QuerySort("id", QuerySortType.DESCENDING));
-//        List<Object> results = DataProvider.getInstance().find(query);
-//        Test test = null;
-//        for (Object object : results) {
-//            test = (Test) object;
-//            LogUtils.e("id====>" + test.getId());
-//            LogUtils.e("name===>" + test.getName());
-//            LogUtils.e("address===>" + test.getAddress());
-//            LogUtils.e("age===>" + test.getAge());
-//        }
-//        LogUtils.e("ResultSize----->" + results.size());
-//    }
-//
-//    private void queryFirst() {
-//        Query query = new Query();
-//        query.from(Test.class);
-////        query.sort(new QuerySort("id", QuerySortType.DESCENDING));
-//        Test test = (Test) DataProvider.getInstance().findFirst(query);
-//        LogUtils.e("id====>" + test.getId());
-//        LogUtils.e("name===>" + test.getName());
-//        LogUtils.e("address===>" + test.getAddress());
-//        LogUtils.e("age===>" + test.getAge());
-//    }
-//
-//    private void update() {
-////        LogUtils.e("UPDATE--->");
-////        Update update = new Update();
-////        Test test = (Test) update.createUpdateInstance(Test.class);
-////        test.setAddress("北京Update");
-////        test.setAge(0);
-////        test.setName("秦宗珂Update");
-////        update.update(test).equal("id", 1);
-////        DataProvider.getInstance().update(update);
-//    }
+    private void queryIden() {
+        Test test = new Test();
+        test.setAddress("UpdateIden--->");
+        db.whereIden(Test.class).updateByUniqueIden(2, test);
+        db.whereIden(Test.class).deleteByUniqueIden(2);
+        Object object = db.whereIden(Test.class).findByUniqueIden(2);
+        LogUtils.e("inden--->");
+        printf(object);
+    }
 
-    private void delete() {
-//        Delete delete = new Delete();
-//        delete.delete(Test.class).equal("id", 1);
-//        DataProvider.getInstance().delete(delete);
 
+    private void printf(List<Object> result) {
+        for (Object object : result) {
+            Test r = (Test) object;
+            LogUtils.e("Id--->" + r.getId());
+            LogUtils.e("Name--->" + r.getName());
+            LogUtils.e("Address--->" + r.getAddress());
+            LogUtils.e("Age--->" + r.getAge());
+        }
+        LogUtils.e("ResultSize--->" + result.size());
+    }
+
+    private void printf(Object object){
+        Test r = (Test) object;
+        LogUtils.e("Id--->" + r.getId());
+        LogUtils.e("Name--->" + r.getName());
+        LogUtils.e("Address--->" + r.getAddress());
+        LogUtils.e("Age--->" + r.getAge());
     }
 }

@@ -95,8 +95,8 @@ public class DataProvider {
         return new QueryBuilder(clazz);
     }
 
-    public IFieldQuery whereByField(Class clazz){
-        return new FieldQueryBuilder();
+    public IFieldQuery whereIden(Class clazz){
+        return new FieldQueryBuilder(clazz);
     }
 
 

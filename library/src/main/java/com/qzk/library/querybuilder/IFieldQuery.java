@@ -25,55 +25,20 @@ public interface IFieldQuery {
      */
     Object findByUniqueIden(Object value,String ...selectFields);
 
-    /**
-     * 根据字段及字段对应的值进行查询
-     * @param value 字段名称 字段的值
-     * @param selectFields 所需查询字段
-     * @return
-     */
-    List<Object> findByField(KeyValue value,String...selectFields);
 
     /**
-     * 根据字段及字段对应的值进行查询
-     * @param value 字段名称 字段的值
-     * @param sort 排序
-     * @param selectFields 所需查询字段
-     * @return
+     * 根据唯一标记更细数据
+     * @param value 值
+     * @param object 所需更新实体
      */
-    List<Object> findByField(KeyValue value,QuerySort sort,String...selectFields);
+    void updateByUniqueIden(Object value,Object object);
 
     /**
-     * 根据字段及字段对应的值进行查询
-     * @param value 字段名称 字段的值
-     * @param sorts 排序
-     * @param selectFields 所需查询字段
-     * @return
+     * 根据唯一标示删除数据
+     * @param value
      */
-    List<Object> findByField(KeyValue value,MultiQuerySorts sorts,String ...selectFields);
+    void deleteByUniqueIden(Object value);
 
 
-    /**
-     * 根据多字段及对应的值进行 查询
-     * @param fields 多个键值对
-     * @param selectFields 所需查询字段
-     * @return
-     */
-    List<Object> findByFields(MultiQueryFields fields, String...selectFields);
 
-    /**
-     * 根据多字段及对应的值进行 单排序查询
-     * @param fields 多个键值对
-     * @param sort 排序字段
-     * @param selectFields 所需查询字段
-     * @return
-     */
-    List<Object> findByFields(MultiQueryFields fields, QuerySort sort, String...selectFields);
-
-    /**根据多字段及对应的值进行多字段排序 查询
-     * @param fields 查询条件的键值对
-     * @param sorts 排序条件
-     * @param selectFields 所需查询字段
-     * @return
-     */
-    List<Object> findByFields(MultiQueryFields fields, MultiQuerySorts sorts, String...selectFields);
 }

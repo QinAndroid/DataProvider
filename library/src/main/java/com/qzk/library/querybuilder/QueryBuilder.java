@@ -160,8 +160,7 @@ public class QueryBuilder implements IQuery{
         }
         sql.append(where);
         LogUtils.e("findAll--->" + sql.toString());
-        return null;
-//        return DBHelper.getInstance().findAll(this.clazz, sql.toString());
+        return DBHelper.getInstance().findAll(clazz,sql.toString());
     }
 
     /**
@@ -181,7 +180,7 @@ public class QueryBuilder implements IQuery{
         StringBuffer sql = SqlCreateUtils.createBaseSelectSql(clazz, fieldName);
         sql.append(where);
         LogUtils.e("findAllSorts--->" + sql.toString());
-        return null;
+        return DBHelper.getInstance().findAll(clazz,sql.toString());
 
 //        return DBHelper.getInstance().findAll(this.clazz, sql.toString());
     }
@@ -203,7 +202,7 @@ public class QueryBuilder implements IQuery{
         StringBuffer sql = SqlCreateUtils.createBaseSelectSql(clazz, fieldName);
         sql.append(where);
         LogUtils.e("findAllSort--->" + sql.toString());
-        return null;
+        return DBHelper.getInstance().findAll(clazz,sql.toString());
 
     }
 
@@ -216,7 +215,7 @@ public class QueryBuilder implements IQuery{
         where.append(LIMIT).append(0).append(COMMA).append(1);
         sql.append(where);
         LogUtils.e("findFirst--->" + sql.toString());
-        return null;
+        return DBHelper.getInstance().findFist(clazz,sql.toString());
     }
 
     /**
@@ -228,6 +227,7 @@ public class QueryBuilder implements IQuery{
         StringBuffer sql = SqlCreateUtils.createBaseUpdateSql(object);
         sql.append(where);
         LogUtils.e("update--->"+sql.toString());
+        DBHelper.getInstance().execSQLwithTransaction(sql.toString());
     }
 
 
@@ -239,6 +239,7 @@ public class QueryBuilder implements IQuery{
         StringBuffer sql = SqlCreateUtils.createBaseDeleteSql(clazz);
         sql.append(where);
         LogUtils.e("delete--->"+sql.toString());
+        DBHelper.getInstance().execSQLwithTransaction(sql.toString());
     }
 
 

@@ -44,6 +44,21 @@ public class ObjectHelper {
     }
 
     /**
+     * 获取主键
+     * @param clazz
+     * @return
+     */
+    public static Field getPrimaryKeyField(Class clazz){
+        Field[]fields = getObjectFields(clazz);
+        for(Field field : fields){
+            if(fieldIsPrimaryKey(field)){
+                return field;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 判断主键是否自增
      * @param field
      * @return
@@ -121,5 +136,19 @@ public class ObjectHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 判断主键是否存在
+     * @param clazz
+     * @return
+     */
+    public static boolean isExistPrimaryKey(Class clazz){
+        Field field = getPrimaryKeyField(clazz);
+        if(null == field){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

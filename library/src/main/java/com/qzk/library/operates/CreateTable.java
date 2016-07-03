@@ -2,7 +2,6 @@ package com.qzk.library.operates;
 
 import com.qzk.library.annotations.PrimaryKey;
 import com.qzk.library.annotations.enums.PrimaryKeyTypes;
-import com.qzk.library.helpers.CreateSQLHelper;
 import com.qzk.library.helpers.ObjectHelper;
 import com.qzk.library.utils.LogUtils;
 

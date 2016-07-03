@@ -20,28 +20,29 @@ public class CursorHelper {
 
     /**
      * 将查询出的cursor转换为object
+     *
      * @param cursor
      * @param clazz
      * @return
      */
-    public static Object cursorToObject(Cursor cursor, Class clazz){
-        if(null == cursor){
+    public static Object cursorToObject(Cursor cursor, Class clazz) {
+        if (null == cursor) {
             LogUtils.e("cursor is null");
             return null;
         }
         Object result = ObjectHelper.classNewInstance(clazz);
         Field[] fields = ObjectHelper.getObjectFields(clazz);
         int len = fields.length;
-        for (int i = 0;i<len;i++) {
+        for (int i = 0; i < len; i++) {
             Field field = fields[i];
-            if(field.isSynthetic()){
+            if (field.isSynthetic()) {
                 continue;
             }
             field.setAccessible(true);
             String fieldName = field.getName();
             DataTypes type = ObjectHelper.getFieldType(field);
             int columnIndex = cursor.getColumnIndex(fieldName);
-            if(-1 == columnIndex){
+            if (-1 == columnIndex) {
                 continue;
             }
             Object setValue = null;
@@ -56,8 +57,8 @@ public class CursorHelper {
             } else if (DataTypes.LONG.equals(type)) {
                 setValue = cursor.getLong(columnIndex);
             }
-            if(null != setValue){
-                ObjectHelper.setObjectValue(field,result,setValue);
+            if (null != setValue) {
+                ObjectHelper.setObjectValue(field, result, setValue);
             }
         }
         return result;
@@ -65,18 +66,47 @@ public class CursorHelper {
 
     /**
      * 查询结果多条
+     *
      * @param cursor
      * @param clazz
      * @return
      */
-    public static  List<Object> cursorToList(Cursor cursor, Class clazz){
+    public static List<Object> cursorToList(Cursor cursor, Class clazz) {
         List<Object> result = null;
         if (null != cursor) {
             result = new ArrayList<>();
-            while (cursor.moveToNext()){
-                Object res = cursorToObject(cursor,clazz);
-                if(null != res){
-                    result.add(res);
+            while (cursor.moveToNext()) {
+                Object object = ObjectHelper.classNewInstance(clazz);
+                Field[] fields = ObjectHelper.getObjectFields(clazz);
+                int len = fields.length;
+                for (int i = 0; i < len; i++) {
+                    Field field = fields[i];
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    field.setAccessible(true);
+                    String fieldName = field.getName();
+                    DataTypes type = ObjectHelper.getFieldType(field);
+                    int columnIndex = cursor.getColumnIndex(fieldName);
+                    if (-1 == columnIndex) {
+                        continue;
+                    }
+                    Object setValue = null;
+                    if (DataTypes.INTEGER.equals(type)) {
+                        setValue = cursor.getInt(columnIndex);
+                    } else if (DataTypes.VARCHAR.equals(type) || DataTypes.TEXT.equals(type)) {
+                        setValue = cursor.getString(columnIndex);
+                    } else if (DataTypes.DOUBLE.equals(type)) {
+                        setValue = cursor.getDouble(columnIndex);
+                    } else if (DataTypes.FLOAT.equals(type)) {
+                        setValue = cursor.getFloat(columnIndex);
+                    } else if (DataTypes.LONG.equals(type)) {
+                        setValue = cursor.getLong(columnIndex);
+                    }
+                    if (null != setValue) {
+                        ObjectHelper.setObjectValue(field, object, setValue);
+                    }
+                    result.add(object);
                 }
             }
         }

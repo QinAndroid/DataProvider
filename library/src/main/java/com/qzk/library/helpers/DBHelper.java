@@ -55,6 +55,7 @@ public class DBHelper {
                     result.add(res);
                 }
             }
+            cursor.close();
         }
         return result;
 
